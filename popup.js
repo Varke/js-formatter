@@ -7,7 +7,20 @@ class JSJSONFormatter {
     init() {
         this.bindEvents();
         this.loadFromClipboard();
+        this.setupMessageListener();
         this.updateStatus('Готов к форматированию');
+    }
+
+    setupMessageListener() {
+        // Слушаем сообщения от background script
+        chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+            if (request.action === 'formatSelectedText') {
+                const inputTextarea = document.getElementById('input-text');
+                inputTextarea.value = request.text;
+                this.setFormat(request.format, false);
+                this.formatCode();
+            }
+        });
     }
 
     bindEvents() {
@@ -41,7 +54,20 @@ class JSJSONFormatter {
         inputTextarea.addEventListener('paste', (e) => {
             setTimeout(() => {
                 this.autoFormat();
-            }, 100);
+            }, 50);
+        });
+
+        // Автоматическое форматирование при вводе
+        inputTextarea.addEventListener('input', (e) => {
+            this.hideError();
+            const text = e.target.value.trim();
+            if (text.length > 10) { // Форматируем только если достаточно текста
+                this.updateStatus('Автоопределение типа кода...');
+                const detectedFormat = this.detectCodeFormat(text);
+                if (detectedFormat !== this.currentFormat) {
+                    this.setFormat(detectedFormat, false);
+                }
+            }
         });
 
         // Keyboard shortcuts
@@ -58,7 +84,7 @@ class JSJSONFormatter {
         });
     }
 
-    setFormat(format) {
+    setFormat(format, shouldReformat = true) {
         this.currentFormat = format;
         
         // Update button states
@@ -70,8 +96,8 @@ class JSJSONFormatter {
         const inputTextarea = document.getElementById('input-text');
         inputTextarea.placeholder = `Вставьте ${format.toUpperCase()} код здесь...`;
 
-        // Re-format if there's content
-        if (inputTextarea.value.trim()) {
+        // Re-format if there's content and shouldReformat is true
+        if (shouldReformat && inputTextarea.value.trim()) {
             this.formatCode();
         }
 
@@ -93,6 +119,9 @@ class JSJSONFormatter {
     autoFormat() {
         const input = document.getElementById('input-text').value.trim();
         if (input) {
+            // Автоматически определяем тип и форматируем
+            const detectedFormat = this.detectCodeFormat(input);
+            this.setFormat(detectedFormat, false);
             this.formatCode();
         }
     }
@@ -109,6 +138,12 @@ class JSJSONFormatter {
         this.hideError();
 
         try {
+            // Автоматическое определение типа кода
+            const detectedFormat = this.detectCodeFormat(input);
+            if (detectedFormat !== this.currentFormat) {
+                this.setFormat(detectedFormat, false); // false = не переформатировать
+            }
+
             let formattedCode;
             
             if (this.currentFormat === 'json') {
@@ -124,6 +159,45 @@ class JSJSONFormatter {
             this.showError(`Ошибка форматирования: ${error.message}`);
             this.updateStatus('Ошибка при форматировании');
         }
+    }
+
+    detectCodeFormat(input) {
+        const trimmed = input.trim();
+        
+        // Проверяем, является ли это валидным JSON
+        try {
+            JSON.parse(trimmed);
+            return 'json';
+        } catch (e) {
+            // Не JSON, проверяем на JavaScript
+        }
+
+        // Проверяем JavaScript-подобные паттерны
+        if (trimmed.includes('function') || 
+            trimmed.includes('const ') || 
+            trimmed.includes('let ') || 
+            trimmed.includes('var ') ||
+            trimmed.includes('=>') ||
+            trimmed.includes('console.') ||
+            trimmed.includes('return ') ||
+            trimmed.includes('if (') ||
+            trimmed.includes('for (') ||
+            trimmed.includes('while (') ||
+            trimmed.includes('class ') ||
+            trimmed.includes('import ') ||
+            trimmed.includes('export ')) {
+            return 'javascript';
+        }
+
+        // Если начинается с { или [ и заканчивается } или ], но не валидный JSON
+        // то это скорее всего JavaScript объект
+        if ((trimmed.startsWith('{') && trimmed.endsWith('}')) ||
+            (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+            return 'javascript';
+        }
+
+        // По умолчанию считаем JavaScript
+        return 'javascript';
     }
 
     formatJSON(input) {
@@ -144,19 +218,59 @@ class JSJSONFormatter {
     }
 
     formatJavaScript(input) {
-        // Basic JavaScript formatting
-        // This is a simplified formatter - for production use consider a proper JS formatter library
-        
-        // Remove extra whitespace and normalize line endings
+        // Enhanced JavaScript formatting
         let formatted = input
             .replace(/\r\n/g, '\n')
             .replace(/\r/g, '\n')
             .replace(/\t/g, '    ');
 
-        // Add proper indentation for common structures
+        // Add proper indentation and spacing
         formatted = this.addJavaScriptIndentation(formatted);
+        
+        // Add spaces around operators
+        formatted = this.addOperatorSpacing(formatted);
+        
+        // Add spaces after keywords
+        formatted = this.addKeywordSpacing(formatted);
 
         return formatted;
+    }
+
+    addOperatorSpacing(code) {
+        // Add spaces around operators
+        return code
+            .replace(/([^=!<>])=([^=])/g, '$1 = $2')
+            .replace(/([^=!<>])==([^=])/g, '$1 == $2')
+            .replace(/([^=!<>])===([^=])/g, '$1 === $2')
+            .replace(/([^=!<>])!=([^=])/g, '$1 != $2')
+            .replace(/([^=!<>])!==([^=])/g, '$1 !== $2')
+            .replace(/([^=!<>])<([^=])/g, '$1 < $2')
+            .replace(/([^=!<>])<=([^=])/g, '$1 <= $2')
+            .replace(/([^=!<>])>([^=])/g, '$1 > $2')
+            .replace(/([^=!<>])>=([^=])/g, '$1 >= $2')
+            .replace(/([^=!<>])\+([^=+])/g, '$1 + $2')
+            .replace(/([^=!<>])-([^=-])/g, '$1 - $2')
+            .replace(/([^=!<>])\*([^=*])/g, '$1 * $2')
+            .replace(/([^=!<>])\/([^=\/])/g, '$1 / $2')
+            .replace(/([^=!<>])%([^=%])/g, '$1 % $2')
+            .replace(/([^=!<>])&&([^=&])/g, '$1 && $2')
+            .replace(/([^=!<>])\|\|([^=|])/g, '$1 || $2');
+    }
+
+    addKeywordSpacing(code) {
+        // Add spaces after keywords
+        return code
+            .replace(/\bif\s*\(/g, 'if (')
+            .replace(/\bfor\s*\(/g, 'for (')
+            .replace(/\bwhile\s*\(/g, 'while (')
+            .replace(/\bswitch\s*\(/g, 'switch (')
+            .replace(/\bcatch\s*\(/g, 'catch (')
+            .replace(/\bfunction\s+([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\(/g, 'function $1(')
+            .replace(/\breturn\s+/g, 'return ')
+            .replace(/\bconst\s+/g, 'const ')
+            .replace(/\blet\s+/g, 'let ')
+            .replace(/\bvar\s+/g, 'var ')
+            .replace(/\bclass\s+/g, 'class ');
     }
 
     addJavaScriptIndentation(code) {

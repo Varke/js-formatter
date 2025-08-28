@@ -6,35 +6,41 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    font-size: 14px;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 13px;
     line-height: 1.5;
     color: #e1e1e1;
-    background: #1a1a1a;
-    width: 450px;
-    min-height: 600px;
+    background: #1e1e1e;
+    width: 480px;
+    min-height: 580px;
+    margin: 0;
+    padding: 0;
 }
 
 .container {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    max-height: 600px;
+    max-height: 580px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 /* Header */
 .header {
-    padding: 20px 20px 15px;
-    border-bottom: 1px solid #333;
-    background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid #2d2d2d;
+    background: linear-gradient(135deg, #252526 0%, #1e1e1e 100%);
 }
 
 .title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     color: #ffffff;
     text-align: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .format-selector {
@@ -44,15 +50,16 @@ body {
 }
 
 .format-btn {
-    padding: 8px 16px;
-    border: 1px solid #444;
-    background: #2a2a2a;
-    color: #ccc;
-    border-radius: 6px;
+    padding: 6px 12px;
+    border: 1px solid #3c3c3c;
+    background: #252526;
+    color: #cccccc;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     transition: all 0.2s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .format-btn:hover {
@@ -61,16 +68,17 @@ body {
 }
 
 .format-btn.active {
-    background: #007acc;
-    border-color: #007acc;
+    background: #0e639c;
+    border-color: #0e639c;
     color: white;
 }
 
 /* Main content */
 .main {
     flex: 1;
-    padding: 20px;
+    padding: 16px 20px;
     overflow-y: auto;
+    background: #1e1e1e;
 }
 
 .input-section {
@@ -87,22 +95,24 @@ body {
 .input-textarea {
     width: 100%;
     padding: 12px;
-    border: 1px solid #444;
-    border-radius: 8px;
-    background: #2a2a2a;
-    color: #e1e1e1;
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    font-size: 13px;
-    line-height: 1.4;
+    border: 1px solid #3c3c3c;
+    border-radius: 6px;
+    background: #252526;
+    color: #cccccc;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 12px;
+    line-height: 1.5;
     resize: vertical;
     min-height: 120px;
-    transition: border-color 0.2s ease;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
 }
 
 .input-textarea:focus {
     outline: none;
     border-color: #007acc;
     box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+    background: #2a2a2a;
 }
 
 .input-textarea::placeholder {
@@ -116,32 +126,33 @@ body {
 }
 
 .action-btn {
-    padding: 10px 16px;
+    padding: 8px 16px;
     border: none;
-    border-radius: 6px;
-    font-size: 13px;
+    border-radius: 4px;
+    font-size: 12px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
     flex: 1;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .action-btn.primary {
-    background: #007acc;
+    background: #0e639c;
     color: white;
 }
 
 .action-btn.primary:hover {
-    background: #005a9e;
+    background: #1177bb;
 }
 
 .action-btn.secondary {
-    background: #444;
-    color: #e1e1e1;
+    background: #3c3c3c;
+    color: #cccccc;
 }
 
 .action-btn.secondary:hover {
-    background: #555;
+    background: #4a4a4a;
 }
 
 /* Output section */
@@ -186,9 +197,9 @@ body {
 }
 
 .output-container {
-    border: 1px solid #444;
-    border-radius: 8px;
-    background: #2a2a2a;
+    border: 1px solid #3c3c3c;
+    border-radius: 6px;
+    background: #252526;
     min-height: 120px;
     position: relative;
 }
@@ -207,64 +218,85 @@ body {
 .output-code {
     padding: 12px;
     margin: 0;
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    font-size: 13px;
-    line-height: 1.4;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 12px;
+    line-height: 1.5;
     overflow-x: auto;
     white-space: pre-wrap;
     word-wrap: break-word;
     max-height: 200px;
     overflow-y: auto;
+    color: #cccccc;
 }
 
 .output-code.hidden {
     display: none;
 }
 
-/* Prism.js theme overrides */
+/* Prism.js theme overrides - VS Code Dark+ inspired */
 .output-code {
     background: transparent !important;
-    color: #e1e1e1 !important;
+    color: #cccccc !important;
 }
 
 .output-code .token.string {
-    color: #a8ff60 !important;
+    color: #ce9178 !important;
 }
 
 .output-code .token.number {
-    color: #ff9d00 !important;
+    color: #b5cea8 !important;
 }
 
 .output-code .token.boolean {
-    color: #ff628c !important;
+    color: #569cd6 !important;
 }
 
 .output-code .token.null {
-    color: #ff628c !important;
+    color: #569cd6 !important;
 }
 
 .output-code .token.property {
-    color: #5ccfe6 !important;
+    color: #9cdcfe !important;
 }
 
 .output-code .token.punctuation {
-    color: #e1e1e1 !important;
+    color: #d4d4d4 !important;
 }
 
 .output-code .token.operator {
-    color: #ff9d00 !important;
+    color: #d4d4d4 !important;
 }
 
 .output-code .token.keyword {
-    color: #ff628c !important;
+    color: #c586c0 !important;
 }
 
 .output-code .token.function {
-    color: #5ccfe6 !important;
+    color: #dcdcaa !important;
 }
 
 .output-code .token.comment {
-    color: #7c7c7c !important;
+    color: #6a9955 !important;
+}
+
+.output-code .token.class-name {
+    color: #4ec9b0 !important;
+}
+
+.output-code .token.variable {
+    color: #9cdcfe !important;
+}
+
+.output-code .token.parameter {
+    color: #9cdcfe !important;
+}
+
+.output-code .token.constant {
+    color: #4fc1ff !important;
+}
+
+.output-code .token.regex {
+    color: #d16969 !important;
 }
 
 /* Error message */
@@ -291,15 +323,16 @@ body {
 
 /* Footer */
 .footer {
-    padding: 15px 20px;
-    border-top: 1px solid #333;
-    background: #1a1a1a;
+    padding: 8px 20px;
+    border-top: 1px solid #2d2d2d;
+    background: #252526;
 }
 
 .status {
     text-align: center;
-    color: #888;
-    font-size: 12px;
+    color: #6a6a6a;
+    font-size: 11px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* Utility classes */

@@ -79,6 +79,20 @@ class BackgroundScript {
             this.openFormatterWithText(info.selectionText, format);
         }
     }
+
+    openFormatterWithText(text, format) {
+        // Открываем popup с предзаполненным текстом
+        chrome.action.openPopup();
+        
+        // Отправляем сообщение в popup с текстом для форматирования
+        setTimeout(() => {
+            chrome.runtime.sendMessage({
+                action: 'formatSelectedText',
+                text: text,
+                format: format
+            });
+        }, 100);
+    }
 }
 
 // Initialize background script
