@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "JS/JSON Formatter",
+  "version": "1.0.0",
+  "description": "Форматирует JavaScript и JSON код с подсветкой синтаксиса",
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "storage"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "JS/JSON Formatter"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+
+}

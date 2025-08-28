@@ -1,0 +1,359 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #e1e1e1;
+    background: #1a1a1a;
+    width: 450px;
+    min-height: 600px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-height: 600px;
+}
+
+/* Header */
+.header {
+    padding: 20px 20px 15px;
+    border-bottom: 1px solid #333;
+    background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #ffffff;
+    text-align: center;
+}
+
+.format-selector {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.format-btn {
+    padding: 8px 16px;
+    border: 1px solid #444;
+    background: #2a2a2a;
+    color: #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.format-btn:hover {
+    background: #3a3a3a;
+    border-color: #555;
+}
+
+.format-btn.active {
+    background: #007acc;
+    border-color: #007acc;
+    color: white;
+}
+
+/* Main content */
+.main {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.input-section {
+    margin-bottom: 20px;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #e1e1e1;
+}
+
+.input-textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    background: #2a2a2a;
+    color: #e1e1e1;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 13px;
+    line-height: 1.4;
+    resize: vertical;
+    min-height: 120px;
+    transition: border-color 0.2s ease;
+}
+
+.input-textarea:focus {
+    outline: none;
+    border-color: #007acc;
+    box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+}
+
+.input-textarea::placeholder {
+    color: #888;
+}
+
+.input-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.action-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+}
+
+.action-btn.primary {
+    background: #007acc;
+    color: white;
+}
+
+.action-btn.primary:hover {
+    background: #005a9e;
+}
+
+.action-btn.secondary {
+    background: #444;
+    color: #e1e1e1;
+}
+
+.action-btn.secondary:hover {
+    background: #555;
+}
+
+/* Output section */
+.output-section {
+    margin-bottom: 20px;
+}
+
+.output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.output-label {
+    font-weight: 500;
+    color: #e1e1e1;
+}
+
+.copy-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid #444;
+    background: #2a2a2a;
+    color: #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+    background: #3a3a3a;
+    border-color: #555;
+}
+
+.copy-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.output-container {
+    border: 1px solid #444;
+    border-radius: 8px;
+    background: #2a2a2a;
+    min-height: 120px;
+    position: relative;
+}
+
+.output-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    pointer-events: none;
+}
+
+.output-code {
+    padding: 12px;
+    margin: 0;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 13px;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.output-code.hidden {
+    display: none;
+}
+
+/* Prism.js theme overrides */
+.output-code {
+    background: transparent !important;
+    color: #e1e1e1 !important;
+}
+
+.output-code .token.string {
+    color: #a8ff60 !important;
+}
+
+.output-code .token.number {
+    color: #ff9d00 !important;
+}
+
+.output-code .token.boolean {
+    color: #ff628c !important;
+}
+
+.output-code .token.null {
+    color: #ff628c !important;
+}
+
+.output-code .token.property {
+    color: #5ccfe6 !important;
+}
+
+.output-code .token.punctuation {
+    color: #e1e1e1 !important;
+}
+
+.output-code .token.operator {
+    color: #ff9d00 !important;
+}
+
+.output-code .token.keyword {
+    color: #ff628c !important;
+}
+
+.output-code .token.function {
+    color: #5ccfe6 !important;
+}
+
+.output-code .token.comment {
+    color: #7c7c7c !important;
+}
+
+/* Error message */
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(255, 98, 140, 0.1);
+    border: 1px solid rgba(255, 98, 140, 0.3);
+    border-radius: 6px;
+    color: #ff628c;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.error-message.hidden {
+    display: none;
+}
+
+.error-message svg {
+    flex-shrink: 0;
+}
+
+/* Footer */
+.footer {
+    padding: 15px 20px;
+    border-top: 1px solid #333;
+    background: #1a1a1a;
+}
+
+.status {
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+}
+
+/* Utility classes */
+.hidden {
+    display: none !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #2a2a2a;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Animation for copy button */
+.copy-btn.copied {
+    background: #28a745 !important;
+    border-color: #28a745 !important;
+    color: white !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    body {
+        width: 100%;
+        min-width: 350px;
+    }
+    
+    .container {
+        max-height: 500px;
+    }
+    
+    .header {
+        padding: 15px 15px 10px;
+    }
+    
+    .main {
+        padding: 15px;
+    }
+    
+    .title {
+        font-size: 16px;
+    }
+}

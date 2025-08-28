@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тестовые примеры для JS/JSON Formatter</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .example {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .example h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #e1e1e1;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Тестовые примеры для JS/JSON Formatter</h1>
+    
+    <div class="instructions">
+        <h3>Как использовать:</h3>
+        <ol>
+            <li>Выделите любой из примеров кода ниже</li>
+            <li>Щелкните правой кнопкой мыши</li>
+            <li>Выберите "Форматировать JS/JSON" → "Как JSON" или "Как JavaScript"</li>
+            <li>Или скопируйте код и вставьте в popup расширения</li>
+        </ol>
+    </div>
+
+    <div class="example">
+        <h3>Пример 1: Простой JSON объект</h3>
+        <div class="code-block">{"name":"John Doe","age":30,"city":"New York","isActive":true,"hobbies":["reading","swimming","coding"],"address":{"street":"123 Main St","zip":"10001"}}</div>
+    </div>
+
+    <div class="example">
+        <h3>Пример 2: JSON массив</h3>
+        <div class="code-block">[{"id":1,"name":"Product 1","price":29.99,"inStock":true},{"id":2,"name":"Product 2","price":49.99,"inStock":false},{"id":3,"name":"Product 3","price":19.99,"inStock":true}]</div>
+    </div>
+
+    <div class="example">
+        <h3>Пример 3: JavaScript объект (не JSON)</h3>
+        <div class="code-block">{name:'John Doe',age:30,city:'New York',isActive:true,hobbies:['reading','swimming','coding'],address:{street:'123 Main St',zip:'10001'}}</div>
+    </div>
+
+    <div class="example">
+        <h3>Пример 4: JavaScript функция</h3>
+        <div class="code-block">function calculateTotal(items){let total=0;for(let i=0;i<items.length;i++){total+=items[i].price;}return total;}const products=[{name:'Laptop',price:999},{name:'Mouse',price:25}];const total=calculateTotal(products);console.log('Total:',total);</div>
+    </div>
+
+    <div class="example">
+        <h3>Пример 5: JavaScript с ES6 синтаксисом</h3>
+        <div class="code-block">const users=[{id:1,name:'Alice',email:'alice@example.com'},{id:2,name:'Bob',email:'bob@example.com'}];const getUserById=(id)=>users.find(user=>user.id===id);const updateUser=(id,updates)=>{const user=getUserById(id);if(user){Object.assign(user,updates);return user;}return null;};</div>
+    </div>
+
+    <div class="example">
+        <h3>Пример 6: Невалидный JSON (для тестирования ошибок)</h3>
+        <div class="code-block">{"name":"John","age":30,"city":"New York","isActive":true,"hobbies":["reading","swimming","coding"],"address":{"street":"123 Main St","zip":"10001"}</div>
+    </div>
+
+    <div class="example">
+        <h3>Пример 7: Сложный JavaScript объект</h3>
+        <div class="code-block">const config={api:{baseUrl:'https://api.example.com',timeout:5000,retries:3},features:{darkMode:true,notifications:false,autoSave:true},user:{preferences:{language:'ru',theme:'dark',timezone:'Europe/Moscow'},permissions:['read','write','delete']}};</div>
+    </div>
+
+    <script>
+        // Добавляем обработчик для выделения текста
+        document.addEventListener('selectionchange', () => {
+            const selection = window.getSelection();
+            if (selection.toString().trim()) {
+                console.log('Выделен текст:', selection.toString());
+            }
+        });
+    </script>
+</body>
+</html>
