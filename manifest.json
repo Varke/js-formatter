@@ -10,7 +10,8 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "JS/JSON Formatter"
+    "default_title": "JS/JSON Formatter",
+    "default_icon": "js-json-logo.png"
   },
   "content_scripts": [
     {
@@ -20,5 +21,11 @@
   ],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "icons": {
+    "16": "js-json-logo.png",
+    "32": "js-json-logo.png",
+    "48": "js-json-logo.png",
+    "128": "js-json-logo.png"
+}
 }

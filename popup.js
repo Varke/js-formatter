@@ -130,6 +130,8 @@ class JSJSONFormatter {
         try {
             // Автоматическое определение типа кода
             const detectedFormat = this.detectCodeFormat(input);
+            console.log('Detected format:', detectedFormat);
+            
             if (detectedFormat !== this.currentFormat) {
                 this.setFormat(detectedFormat, false); // false = не переформатировать
             }
@@ -143,7 +145,7 @@ class JSJSONFormatter {
             }
 
             this.displayFormattedCode(formattedCode);
-            this.updateStatus('Код успешно отформатирован');
+            this.updateStatus(`Код успешно отформатирован (${this.currentFormat})`);
             
         } catch (error) {
             this.showError(`Ошибка форматирования: ${error.message}`);
@@ -211,22 +213,95 @@ class JSJSONFormatter {
     }
 
     formatJavaScript(input) {
-        // Enhanced JavaScript formatting
+        // Enhanced JavaScript formatting for objects and arrays
         let formatted = input
             .replace(/\r\n/g, '\n')
             .replace(/\r/g, '\n')
-            .replace(/\t/g, '    ');
+            .replace(/\t/g, '    ')
+            .trim();
 
-        // Add proper indentation and spacing
-        formatted = this.addJavaScriptIndentation(formatted);
-        
-        // Add spaces around operators
-        formatted = this.addOperatorSpacing(formatted);
-        
-        // Add spaces after keywords
-        formatted = this.addKeywordSpacing(formatted);
+        // If it's a single line object/array, format it properly
+        if (formatted.includes('{') && formatted.includes('}') && !formatted.includes('\n')) {
+            formatted = this.formatSingleLineObject(formatted);
+        } else if (formatted.includes('[') && formatted.includes(']') && !formatted.includes('\n')) {
+            formatted = this.formatSingleLineArray(formatted);
+        }
 
-        return formatted;
+        // Basic indentation for multi-line code
+        const lines = formatted.split('\n');
+        const result = [];
+        let indentLevel = 0;
+        const indentSize = 2;
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            
+            if (!line) {
+                result.push('');
+                continue;
+            }
+
+            // Decrease indent for closing braces
+            if (line.startsWith('}') || line.startsWith(']')) {
+                indentLevel = Math.max(0, indentLevel - 1);
+            }
+
+            // Add current line with proper indentation
+            result.push(' '.repeat(indentLevel * indentSize) + line);
+
+            // Increase indent for opening braces
+            if (line.endsWith('{') || line.endsWith('[')) {
+                indentLevel++;
+            }
+        }
+
+        return result.join('\n');
+    }
+
+    formatSingleLineObject(input) {
+        let result = '';
+        let indentLevel = 0;
+        const indentSize = 2;
+        let inString = false;
+        let stringChar = '';
+        
+        for (let i = 0; i < input.length; i++) {
+            const char = input[i];
+            
+            // Handle string literals
+            if ((char === '"' || char === "'") && (i === 0 || input[i-1] !== '\\')) {
+                if (!inString) {
+                    inString = true;
+                    stringChar = char;
+                } else if (char === stringChar) {
+                    inString = false;
+                }
+            }
+            
+            if (!inString) {
+                if (char === '{' || char === '[') {
+                    result += char + '\n' + ' '.repeat((indentLevel + 1) * indentSize);
+                    indentLevel++;
+                } else if (char === '}' || char === ']') {
+                    indentLevel = Math.max(0, indentLevel - 1);
+                    result += '\n' + ' '.repeat(indentLevel * indentSize) + char;
+                } else if (char === ',') {
+                    result += char + '\n' + ' '.repeat(indentLevel * indentSize);
+                } else if (char === ':') {
+                    result += char + ' ';
+                } else {
+                    result += char;
+                }
+            } else {
+                result += char;
+            }
+        }
+        
+        return result;
+    }
+
+    formatSingleLineArray(input) {
+        return this.formatSingleLineObject(input);
     }
 
     addOperatorSpacing(code) {
@@ -288,9 +363,19 @@ class JSJSONFormatter {
             // Add current line with proper indentation
             result.push(' '.repeat(indentLevel * indentSize) + line);
 
-            // Increase indent for opening braces
+            // Increase indent for opening braces and control structures
             if (line.match(/[{([]$/)) {
                 indentLevel++;
+            }
+            
+            // Increase indent for control structures
+            if (line.match(/\b(if|for|while|switch|try|catch|else)\s*\(/)) {
+                indentLevel++;
+            }
+            
+            // Decrease indent for else
+            if (line.match(/^\s*else\b/)) {
+                indentLevel = Math.max(0, indentLevel - 1);
             }
         }
 
@@ -314,10 +399,18 @@ class JSJSONFormatter {
             const language = this.currentFormat === 'json' ? 'json' : 'javascript';
             outputCode.className = `output-code language-${language}`;
             
-            // Force re-highlighting
+            // Force re-highlighting with multiple attempts
             setTimeout(() => {
                 Prism.highlightElement(outputCode);
             }, 10);
+            
+            setTimeout(() => {
+                Prism.highlightElement(outputCode);
+            }, 50);
+            
+            setTimeout(() => {
+                Prism.highlightElement(outputCode);
+            }, 100);
         }
 
         // Show copy button

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест JavaScript форматирования</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .example {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #e1e1e1;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Тест JavaScript форматирования</h1>
+    
+    <div class="example">
+        <h3>Пример 1: Простая функция</h3>
+        <div class="code-block">function hello(name){return "Hello, "+name+"!";}console.log(hello("World"));</div>
+    </div>
+
+    <div class="example">
+        <h3>Пример 2: Объект с методами</h3>
+        <div class="code-block">const user={name:"John",age:30,greet(){return "Hi, I'm "+this.name;}};</div>
+    </div>
+
+    <div class="example">
+        <h3>Пример 3: Условные операторы</h3>
+        <div class="code-block">if(age>=18){console.log("Adult");}else{console.log("Minor");}</div>
+    </div>
+
+    <div class="example">
+        <h3>Пример 4: Циклы</h3>
+        <div class="code-block">for(let i=0;i<10;i++){if(i%2===0){console.log(i+" is even");}}</div>
+    </div>
+
+    <div class="example">
+        <h3>Пример 5: Стрелочные функции</h3>
+        <div class="code-block">const numbers=[1,2,3,4,5];const doubled=numbers.map(n=>n*2);console.log(doubled);</div>
+    </div>
+
+    <div class="example">
+        <h3>Пример 6: Класс</h3>
+        <div class="code-block">class Person{constructor(name){this.name=name;}sayHello(){return "Hello, "+this.name;}}</div>
+    </div>
+
+    <div class="example">
+        <h3>Пример 7: Try-catch</h3>
+        <div class="code-block">try{const result=JSON.parse("invalid json");}catch(error){console.error("Error:",error.message);}</div>
+    </div>
+
+    <script>
+        // Добавляем обработчик для выделения текста
+        document.addEventListener('selectionchange', () => {
+            const selection = window.getSelection();
+            if (selection.toString().trim()) {
+                console.log('Выделен текст:', selection.toString());
+            }
+        });
+    </script>
+</body>
+</html>
