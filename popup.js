@@ -175,7 +175,10 @@ class JSJSONFormatter {
             trimmed.includes('while (') ||
             trimmed.includes('class ') ||
             trimmed.includes('import ') ||
-            trimmed.includes('export ')) {
+            trimmed.includes('export ') ||
+            trimmed.includes(';') ||
+            trimmed.includes('(') ||
+            trimmed.includes(')')) {
             return 'javascript';
         }
 
@@ -310,7 +313,11 @@ class JSJSONFormatter {
         if (typeof Prism !== 'undefined') {
             const language = this.currentFormat === 'json' ? 'json' : 'javascript';
             outputCode.className = `output-code language-${language}`;
-            Prism.highlightElement(outputCode);
+            
+            // Force re-highlighting
+            setTimeout(() => {
+                Prism.highlightElement(outputCode);
+            }, 10);
         }
 
         // Show copy button

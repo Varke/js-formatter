@@ -24,24 +24,9 @@ class BackgroundScript {
             // Create main context menu item
             chrome.contextMenus.create({
                 id: 'format-js-json',
-                title: 'Форматировать JS/JSON',
+                title: 'Форматировать код',
                 contexts: ['selection'],
                 documentUrlPatterns: ['<all_urls>']
-            });
-
-            // Create submenu items
-            chrome.contextMenus.create({
-                id: 'format-json',
-                parentId: 'format-js-json',
-                title: 'Как JSON',
-                contexts: ['selection']
-            });
-
-            chrome.contextMenus.create({
-                id: 'format-javascript',
-                parentId: 'format-js-json',
-                title: 'Как JavaScript',
-                contexts: ['selection']
             });
         });
     }
@@ -74,17 +59,15 @@ class BackgroundScript {
 
     // Handle context menu clicks
     handleContextMenuClick(info, tab) {
-        if (info.menuItemId === 'format-json' || info.menuItemId === 'format-javascript') {
-            const format = info.menuItemId === 'format-json' ? 'json' : 'javascript';
-            this.openFormatterWithText(info.selectionText, format);
+        if (info.menuItemId === 'format-js-json') {
+            this.openFormatterWithText(info.selectionText);
         }
     }
 
-    openFormatterWithText(text, format) {
+    openFormatterWithText(text) {
         // Сохраняем текст в storage для popup
         chrome.storage.local.set({
-            'selectedText': text,
-            'selectedFormat': format
+            'selectedText': text
         }, () => {
             // Открываем popup
             chrome.action.openPopup();
