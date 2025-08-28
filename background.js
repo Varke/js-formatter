@@ -81,17 +81,14 @@ class BackgroundScript {
     }
 
     openFormatterWithText(text, format) {
-        // Открываем popup с предзаполненным текстом
-        chrome.action.openPopup();
-        
-        // Отправляем сообщение в popup с текстом для форматирования
-        setTimeout(() => {
-            chrome.runtime.sendMessage({
-                action: 'formatSelectedText',
-                text: text,
-                format: format
-            });
-        }, 100);
+        // Сохраняем текст в storage для popup
+        chrome.storage.local.set({
+            'selectedText': text,
+            'selectedFormat': format
+        }, () => {
+            // Открываем popup
+            chrome.action.openPopup();
+        });
     }
 }
 

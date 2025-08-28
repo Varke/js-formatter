@@ -12,25 +12,24 @@ class JSJSONFormatter {
     }
 
     setupMessageListener() {
-        // Слушаем сообщения от background script
-        chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-            if (request.action === 'formatSelectedText') {
+        // Проверяем storage на наличие выделенного текста
+        chrome.storage.local.get(['selectedText', 'selectedFormat'], (result) => {
+            if (result.selectedText) {
                 const inputTextarea = document.getElementById('input-text');
-                inputTextarea.value = request.text;
-                this.setFormat(request.format, false);
+                inputTextarea.value = result.selectedText;
+                
+                // Автоматически определяем тип кода
+                const detectedFormat = this.detectCodeFormat(result.selectedText);
+                this.setFormat(detectedFormat, false);
                 this.formatCode();
+                
+                // Очищаем storage
+                chrome.storage.local.remove(['selectedText', 'selectedFormat']);
             }
         });
     }
 
     bindEvents() {
-        // Format selector buttons
-        document.querySelectorAll('.format-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                this.setFormat(e.target.dataset.format);
-            });
-        });
-
         // Action buttons
         document.getElementById('format-btn').addEventListener('click', () => {
             this.formatCode();
@@ -46,10 +45,6 @@ class JSJSONFormatter {
 
         // Input textarea
         const inputTextarea = document.getElementById('input-text');
-        inputTextarea.addEventListener('input', () => {
-            this.hideError();
-            this.updateStatus('Введите код для форматирования');
-        });
 
         inputTextarea.addEventListener('paste', (e) => {
             setTimeout(() => {
@@ -87,21 +82,16 @@ class JSJSONFormatter {
     setFormat(format, shouldReformat = true) {
         this.currentFormat = format;
         
-        // Update button states
-        document.querySelectorAll('.format-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.format === format);
-        });
-
         // Update placeholder text
         const inputTextarea = document.getElementById('input-text');
-        inputTextarea.placeholder = `Вставьте ${format.toUpperCase()} код здесь...`;
+        inputTextarea.placeholder = `Вставьте код для автоматического форматирования...`;
 
         // Re-format if there's content and shouldReformat is true
         if (shouldReformat && inputTextarea.value.trim()) {
             this.formatCode();
         }
 
-        this.updateStatus(`Режим: ${format.toUpperCase()}`);
+        this.updateStatus(`Определен тип: ${format.toUpperCase()}`);
     }
 
     async loadFromClipboard() {

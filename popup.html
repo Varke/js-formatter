@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="popup.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
@@ -14,10 +15,6 @@
     <div class="container">
         <header class="header">
             <h1 class="title">JS/JSON Formatter</h1>
-            <div class="format-selector">
-                <button class="format-btn active" data-format="json">JSON</button>
-                <button class="format-btn" data-format="javascript">JavaScript</button>
-            </div>
         </header>
 
         <main class="main">
@@ -26,7 +23,7 @@
                 <textarea 
                     id="input-text" 
                     class="input-textarea" 
-                    placeholder="Вставьте JSON или JavaScript код здесь..."
+                    placeholder="Вставьте код для автоматического форматирования..."
                     rows="8"
                 ></textarea>
                 <div class="input-actions">
